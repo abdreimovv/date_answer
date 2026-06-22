@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Важный вопрос 💌</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rose: #f0b8c8;
+            --deep: #5a2a3a;
+            --blush: #fde8f0;
+            --accent: #e07898;
+            --light: #fff0f5;
+            --card: #fffafc;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff0f5 0%, #fde8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0;
+            font-size: 1.2rem;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 480px;
+            width: 92vw;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 28px;
+            padding: 48px 36px;
+            box-shadow: 0 8px 48px rgba(224, 120, 152, 0.18), 0 2px 12px rgba(224, 120, 152, 0.08);
+            width: 100%;
+            border: 1px solid rgba(240, 184, 200, 0.3);
+        }
+
+        .emoji-big {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--deep);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: #b08090;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            position: relative;
+            height: 52px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, var(--accent), #f0a0c0);
+            color: white;
+            box-shadow: 0 4px 18px rgba(224, 120, 152, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(224, 120, 152, 0.5);
+        }
+
+        .btn-no {
+            background: var(--blush);
+            color: var(--accent);
+            position: absolute;
+            white-space: nowrap;
+            border: 1.5px solid rgba(224, 120, 152, 0.3);
+            transition: left 0.08s ease, top 0.08s ease;
+            z-index: 1;
+        }
+
+        .btn-secondary {
+            background: var(--blush);
+            color: var(--deep);
+            border: 1.5px solid rgba(224, 120, 152, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #fad0e0;
+        }
+
+        /* Date input */
+        .date-input {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .date-input input,
+        .date-input select {
+            padding: 12px 14px;
+            border: 1.5px solid #f0c8d8;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--deep);
+            background: var(--blush);
+            outline: none;
+            transition: border-color 0.2s;
+            text-align: center;
+        }
+
+        .date-input input:focus,
+        .date-input select:focus {
+            border-color: var(--accent);
+        }
+
+        .date-input input[type=number] {
+            width: 70px;
+        }
+
+        .date-input select {
+            width: 130px;
+        }
+
+        .date-input input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        /* Food options */
+        .food-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .food-btn {
+            padding: 14px 10px;
+            border: 1.5px solid #f0c8d8;
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.83rem;
+            color: var(--deep);
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .food-btn .food-emoji {
+            font-size: 1.5rem;
+        }
+
+        .food-btn:hover,
+        .food-btn.selected {
+            border-color: var(--accent);
+            background: var(--blush);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(224, 120, 152, 0.18);
+        }
+
+        .food-btn.selected {
+            background: #fde0ec;
+        }
+
+        /* Date picker */
+        .datetime-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
+            width: 100%;
+        }
+
+        .datetime-wrap label {
+            font-size: 0.78rem;
+            color: #c090a8;
+            text-align: left;
+            margin-bottom: -4px;
+        }
+
+        .datetime-wrap input {
+            padding: 14px 18px;
+            border: 1.5px solid #f0c8d8;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--deep);
+            background: var(--blush);
+            outline: none;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        .datetime-wrap input:focus {
+            border-color: var(--accent);
+        }
+
+        .divider {
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--rose), transparent);
+            margin: 0 auto 24px;
+        }
+
+        .final-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--deep);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .final-sub {
+            font-size: 0.85rem;
+            color: #d0a0b8;
+            margin-bottom: 0;
+        }
+
+        /* Goodbye screen */
+        .goodbye-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: var(--deep);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="petals"><br></div><!-- SCREEN 1: Да / Нет -->
+    <div class="screen active" id="s1">
+        <div class="card"><span class="emoji-big">💌</span>
+            <h1>Вы согласны пойти<br>со мной на <em>свидание?</em></h1>
+            <p>Очень важный вопрос, прошу ответить честно</p>
+            <div class="btn-group" id="btnGroup"><button class="btn btn-yes" onclick="nextScreen('s2')">Да 🌸</button> <button class="btn btn-no" id="btnNo">Нет</button></div>
+        </div>
+    </div><!-- SCREEN 2: Дата рождения -->
+    <div class="screen" id="s2">
+        <div class="card"><span class="emoji-big">🎂</span>
+            <h1>Когда у вас<br><em>день рождения?</em></h1>
+            <p>Введите свою дату рождения</p>
+            <div class="date-input"><input type="number" id="bDay" placeholder="ДД" min="1" max="31"> <select id="bMonth">&nbsp;<option value="">Месяц</option>
+                    <option value="1">Январь</option>
+                    <option value="2">Февраль</option>
+                    <option value="3">Март</option>
+                    <option value="4">Апрель</option>
+                    <option value="5">Май</option>
+                    <option value="6">Июнь</option>
+                    <option value="7">Июль</option>
+                    <option value="8">Август</option>
+                    <option value="9">Сентябрь</option>
+                    <option value="10">Октябрь</option>
+                    <option value="11">Ноябрь</option>
+                    <option value="12">Декабрь</option>&nbsp;
+                </select> <input type="number" id="bYear" placeholder="ГГГГ" min="1900" max="2025" style="width:90px;"></div><button class="btn btn-yes" onclick="checkBirthday()">Дальше &rarr;</button>
+        </div>
+    </div><!-- SCREEN 3: Мадина? -->
+    <div class="screen" id="s3">
+        <div class="card"><span class="emoji-big">🌹</span>
+            <h1><em>О, Мадина,</em><br>это вы?</h1>
+            <div class="divider"><br></div>
+            <p>Я так и думал...</p><button class="btn btn-yes" onclick="nextScreen('s4')">Да жаным, кто же ещё 😏</button>
+        </div>
+    </div><!-- SCREEN: Неверная дата — финальный экран -->
+    <div class="screen" id="s_wrong">
+        <div class="card"><span class="emoji-big">🥀</span>
+            <p class="goodbye-text">Извините, но Шах<br>ждал другую девушку.</p>
+            <div class="divider"><br></div>
+            <p>Всего хорошего 🌸</p>
+        </div>
+    </div><!-- SCREEN 5: Еда -->
+    <div class="screen" id="s4">
+        <div class="card"><span class="emoji-big">🍽️</span>
+            <h1>Что вы<br><em>предпочитаете?</em></h1>
+            <p>Выберите, что вам больше нравится</p>
+            <div class="food-grid"><button class="food-btn" onclick="selectFood(this, 'бургер')"><span class="food-emoji">🍔</span>Бургер</button> <button class="food-btn" onclick="selectFood(this, 'шаурма')"><span class="food-emoji">🌯</span>Шаурма</button> <button class="food-btn" onclick="selectFood(this, 'ресторанное блюдо')"><span class="food-emoji">🍷</span>Ресторан</button> <button class="food-btn" onclick="selectFood(this, 'шашлык')"><span class="food-emoji">🍢</span>Шашлык 🔥</button> <button class="food-btn" onclick="selectFood(this, 'амса')"><span class="food-emoji">🥟</span>Самса</button> <button class="food-btn" onclick="selectFood(this, 'просто кофе')"><span class="food-emoji">☕</span>Просто кофе</button> <button class="food-btn" onclick="selectFood(this, 'лагман')"><span class="food-emoji">🍜</span>Лагман</button> <button class="food-btn" onclick="selectFood(this, 'плов')"><span class="food-emoji">🍚</span>Плов</button> <button class="food-btn" onclick="selectFood(this, 'пицца')"><span class="food-emoji">🍕</span>Пицца</button> <button class="food-btn" onclick="selectFood(this, 'мороженое')"><span class="food-emoji">🍦</span>Мороженое</button></div><button class="btn btn-yes" id="foodNext" style="opacity:0.4;pointer-events:none;" onclick="nextScreen('s5')">Дальше &rarr;</button>
+        </div>
+    </div><!-- SCREEN 6: Дата встречи -->
+    <div class="screen" id="s5">
+        <div class="card"><span class="emoji-big">📅</span>
+            <h1>Когда вам<br><em>удобно?</em></h1>
+            <p>Выберите день и время нашей встречи</p>
+            <div class="datetime-wrap"><label>День встречи</label> <input type="date" id="meetDate"> <label>Время</label> <input type="time" id="meetTime" value="18:00"></div><button class="btn btn-yes" onclick="showFinal()">Подтвердить 💫</button>
+        </div>
+    </div><!-- SCREEN 7: Финал -->
+    <div class="screen" id="s6">
+        <div class="card"><span class="emoji-big">🌸</span>
+            <div class="final-text" id="finalMsg"><br></div>
+            <div class="divider"><br></div>
+            <p class="final-sub">Буду ждать с нетерпением ✨</p>
+        </div>
+    </div>
+    <script>
+        const TELEGRAM_TOKEN = '8643571398:AAEZWfjCs12VZOrQatuvk1W28KblQkJy99s'; 
+        const TELEGRAM_CHAT_ID = '621595278';
+        
+        function sendTelegramMessage(text) {
+          const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
+          fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: TELEGRAM_CHAT_ID,
+              text: text,
+              parse_mode: 'HTML'
+            })
+          })
+          .then(response => {
+            if (!response.ok) console.error('Ошибка отправки в TG:', response.statusText);
+          })
+          .catch(error => console.error('Ошибка сети:', error));
+        }
+        
+        // Petals
+        const petalEmojis = ['🌸','🌺','🌷','💗','✿'];
+        for (let i = 0; i < 14; i++) {
+          const p = document.createElement('div');
+          p.className = 'petal';
+          p.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+          p.style.left = Math.random() * 100 + 'vw';
+          p.style.animationDuration = (6 + Math.random() * 8) + 's';
+          p.style.animationDelay = (Math.random() * 10) + 's';
+          p.style.fontSize = (0.8 + Math.random() * 0.9) + 'rem';
+          document.getElementById('petals').appendChild(p);
+        }
+        
+        let selectedFood = '';
+        
+        function nextScreen(id) {
+          document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+          document.getElementById(id).classList.add('active');
+        }
+        
+        // Убегающая кнопка "Нет"
+        const btnNo = document.getElementById('btnNo');
+        btnNo.style.left = '164px';
+        btnNo.style.top = '0px';
+        
+        btnNo.addEventListener('mouseenter', moveNoBtn);
+        btnNo.addEventListener('mousemove', moveNoBtn);
+        
+        function moveNoBtn() {
+          const card = document.querySelector('#s1 .card');
+          const cardW = card.offsetWidth - 80;
+          const btnW = btnNo.offsetWidth;
+        
+          const curLeft = parseFloat(btnNo.style.left);
+          const curTop  = parseFloat(btnNo.style.top);
+        
+          let newLeft, newTop, attempts = 0;
+          do {
+            newLeft = 10 + Math.random() * (cardW - btnW - 20);
+            newTop  = -20 + Math.random() * 80;
+            attempts++;
+          } while (
+            Math.abs(newLeft - curLeft) < 80 &&
+            Math.abs(newTop  - curTop)  < 30 &&
+            attempts < 30
+          );
+        
+          btnNo.style.left = newLeft + 'px';
+          btnNo.style.top  = newTop  + 'px';
+        }
+        
+        // Birthday check
+        function checkBirthday() {
+          const day   = parseInt(document.getElementById('bDay').value);
+          const month = parseInt(document.getElementById('bMonth').value);
+          const year  = parseInt(document.getElementById('bYear').value);
+          
+          if (day === 27 && month === 8 && year === 2007) {
+            nextScreen('s3');
+          } else {
+            const wrongDateStr = `${day || '??'}.${month || '??'}.${year || '???'}`;
+            sendTelegramMessage(`⚠️ <b>Кто-то ввел неверную дату!</b>\nПопытка ввода: ${wrongDateStr}`);
+            nextScreen('s_wrong');
+          }
+        }
+        
+        // Food selection
+        function selectFood(btn, food) {
+          document.querySelectorAll('.food-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedFood = food;
+          const next = document.getElementById('foodNext');
+          next.style.opacity = '1';
+          next.style.pointerEvents = 'auto';
+        }
+        
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('meetDate').min = today;
+        
+        // Final
+        function showFinal() {
+          const dateVal = document.getElementById('meetDate').value;
+          const timeVal = document.getElementById('meetTime').value;
+          if (!dateVal || !timeVal) {
+            alert('Пожалуйста, выберите день и время 🌸');
+            return;
+          }
+          const dateObj = new Date(dateVal + 'T12:00:00');
+          const days   = ['воскресенье','понедельник','вторник','среду','четверг','пятницу','субботу'];
+          const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+          const dayName   = days[dateObj.getDay()];
+          const dayNum    = dateObj.getDate();
+          const monthName = months[dateObj.getMonth()];
+          const [h, m]    = timeVal.split(':');
+          const dateStr   = `${dayNum} ${monthName} (${dayName}) в ${h}:${m}`;
+        
+          document.getElementById('finalMsg').innerHTML =
+            `Всё, тогда жду вас <strong>${dateStr}</strong>,<br>чтобы покушать с вами <strong>${selectedFood}</strong> 🌸`;
+        
+          nextScreen('s6');
+        
+          const tgMessage = `❤️ <b>Мадина согласилась на свидание!</b>\n\n` +
+                            `🍴 <b>Что выберет:</b> ${selectedFood}\n` +
+                            `📅 <b>Когда:</b> ${dateStr}`;
+          sendTelegramMessage(tgMessage);
+        
+          for (let i = 0; i < 10; i++) {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            p.textContent = '🌸';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (3 + Math.random() * 4) + 's';
+            p.style.animationDelay = (Math.random() * 2) + 's';
+            document.getElementById('petals').appendChild(p);
+          }
+        }
+    </script>
+</body>
+
+</html>
